@@ -22,59 +22,69 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 
+// Andrew Craib S1628364
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private Context context;
 
-    private String plndRoadworksUrl="http://trafficscotland.org/rss/feeds/plannedroadworks.aspx";
-    private String curIncidentsUrl="http://trafficscotland.org/rss/feeds/currentincidents.aspx";
+    //The URL for Current Incidents and Planned Roadworks RSS
+    private String currentIncidentsUrl="http://trafficscotland.org/rss/feeds/currentincidents.aspx";
+    private String plannedRoadworksUrl="http://trafficscotland.org/rss/feeds/plannedroadworks.aspx";
 
-    private Button fetchIncidentsBtn;
-    private Button fetchRoadworksBtn;
+    //This gives the button IDs
+    private Button currentIncidentsButton;
+    private Button plannedRoadworksButton;
     private Button dateEnterBtn;
 
-    private ArrayList<Traffic> incidentList;
-    private ArrayList<Traffic> roadWorksList;
+    //The ArrayLists for Current Incidents and Planned Roadworks
+    private ArrayList<Traffic> currentIncidentsList;
+    private ArrayList<Traffic> plannedRoadworksList;
 
-    private ArrayAdapter<Traffic> incidentAdapter;
-    private ArrayAdapter<Traffic> roadworksAdapter;
+    //The ArrayLists for Current Incidents and Planned Roadworks
+    private ArrayAdapter<Traffic> currentIncidentsAdapter;
+    private ArrayAdapter<Traffic> plannedRoadworksAdapter;
 
     String pattern = " EEEE, dd MMMM yyyy";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-    ListView incidentsListView;
-    ListView roadworksListView;
+    ListView currentIncidentsListView;
+    ListView plannedRoadworksListView;
 
     @Override
+    //Shows the Activity Main Layout
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fetchIncidentsBtn = (Button) findViewById(R.id.fetchIncidentsBtn);
-        fetchRoadworksBtn = (Button) findViewById(R.id.fetchRoadworksBtn);
 
-        roadWorksList = new ArrayList<Traffic>();
-        incidentList = new ArrayList<Traffic>();
+        //This links the buttons to the XML layout
+        currentIncidentsButton = (Button) findViewById(R.id.currentIncidentsButton);
+        plannedRoadworksButton = (Button) findViewById(R.id.plannedRoadworksButton);
+
+        //This creates a new ArrayList
+        currentIncidentsList = new ArrayList<Traffic>();
+        plannedRoadworksList = new ArrayList<Traffic>();
+
 
         new FetchFeedTask().execute((Void) null);
 
-        fetchIncidentsBtn.setOnClickListener(new View.OnClickListener() {
+        //This starts the activity of the Current Incidents when the related button is clicked
+        currentIncidentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // incidentsListView.setAdapter(incidentAdapter);
-                // incidentsListView.setVisibility(View.VISIBLE);
-                // roadworksListView.setVisibility(View.INVISIBLE);
                 Intent myIntent = new Intent(MainActivity.this, IncidentsActivity.class);
-                myIntent.putExtra("incidentsList", incidentList);
+                myIntent.putExtra("currentIncidentsList", currentIncidentsList);
                 MainActivity.this.startActivity(myIntent);
 
             }});
 
-        fetchRoadworksBtn.setOnClickListener(new View.OnClickListener() {
+        //This starts the activity of the Planned Roadworks when the related button is clicked
+        plannedRoadworksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(MainActivity.this, RoadworksActivity.class);
-                myIntent.putExtra("roadworksList", roadWorksList);
+                myIntent.putExtra("plannedRoadworksList", plannedRoadworksList);
                 MainActivity.this.startActivity(myIntent);
             }});
     }
@@ -83,20 +93,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            //mSwipeLayout.setRefreshing(true);
-            //mFeedTitle = null;
-            //mFeedLink = null;
-            //mFeedDescription = null;
-            //mFeedTitleTextView.setText("Feed Title: " + mFeedTitle);
-            //mFeedDescriptionTextView.setText("Feed Description: " + mFeedDescription);
-            //mFeedLinkTextView.setText("Feed Link: " + mFeedLink);
-            //urlLink = curIncidentsUrl;
+
         }
 
         @Override
+        //This parses the related URL to the correct page
         protected Boolean doInBackground(Void... voids) {
 
-            String urlLink = curIncidentsUrl;
+            String urlLink = currentIncidentsUrl;
 
             if (TextUtils.isEmpty(urlLink))
                 return false;
@@ -105,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
                 if(!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
                     urlLink = "http://" + urlLink;
 
-                URL url = new URL(curIncidentsUrl);
+                URL url = new URL(currentIncidentsUrl);
                 InputStream inputStream = url.openConnection().getInputStream();
-                incidentList = MainActivity.parseFeed(inputStream);
+                currentIncidentsList = MainActivity.parseFeed(inputStream);
 
-                URL url2 = new URL(plndRoadworksUrl);
+                URL url2 = new URL(plannedRoadworksUrl);
                 InputStream inputStream2 = url2.openConnection().getInputStream();
-                roadWorksList = MainActivity.parseFeed(inputStream2);
+                plannedRoadworksList = MainActivity.parseFeed(inputStream2);
 
 
                 return true;
@@ -123,28 +127,22 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        //This populates the ListViews for the respective activities
         @Override
         protected void onPostExecute(Boolean success) {
-            // mSwipeLayout.setRefreshing(false);
 
             if (success) {
-                //mFeedTitleTextView.setText("Feed Title: " + mFeedTitle);
-                //mFeedDescriptionTextView.setText("Feed Description: " + mFeedDescription);
-                //mFeedLinkTextView.setText("Feed Link: " + mFeedLink);
-                // Fill RecyclerView
-                incidentAdapter = new trafficArrayAdapter(MainActivity.this, 0, incidentList);
-                roadworksAdapter = new trafficArrayAdapter(MainActivity.this, 0, roadWorksList);
 
-
+                currentIncidentsAdapter = new trafficArrayAdapter(MainActivity.this, 0, currentIncidentsList);
+                plannedRoadworksAdapter = new trafficArrayAdapter(MainActivity.this, 0, plannedRoadworksList);
 
             } else {
-                //Toast.makeText(MainActivity.this,
-                //  "Enter a valid Rss feed url",
-                //Toast.LENGTH_LONG).show();
+
             }
         }
     }
 
+    //This sets the variables for the ArrayList to null if no value is found
     public static ArrayList<Traffic> parseFeed(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
         String link = null;
@@ -156,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isItem = false;
         ArrayList<Traffic> items = new ArrayList<>();
 
+        //This parses the details and puts them into the ArrayList if they can be found
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
             xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -222,9 +221,7 @@ public class MainActivity extends AppCompatActivity {
                         Traffic item = new Traffic(title, description, link, georss, author, comments, pubDate);
                         items.add(item);
                     } else {
-                        //mFeedTitle = title;
-                        //mFeedLink = link;
-                        //mFeedDescription = description;
+
                     }
 
                     title = null;

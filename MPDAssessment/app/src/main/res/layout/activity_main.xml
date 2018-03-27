@@ -10,15 +10,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.andycraib.mpdassessment.MainActivity">
 
+    <!--Andrew Craib S1628364-->
+
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
-        android:text="Traffic Scotland"
-        android:id="@+id/textView" />
+        android:text="Traffic Scotland" />
 
     <Button
-        android:id="@+id/fetchIncidentsBtn"
+        android:id="@+id/currentIncidentsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -28,33 +30,32 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <Button
-        android:id="@+id/fetchRoadworksBtn"
+        android:id="@+id/plannedRoadworksButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/fetchIncidentsBtn"
+        android:layout_below="@+id/currentIncidentsButton"
         android:layout_marginTop="11dp"
         android:text="Roadworks" />
 
     <ListView
-        android:id="@+id/incidentsListView"
+        android:id="@+id/currentIncidentsListView"
         android:layout_width="364dp"
         android:layout_height="434dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/fetchIncidentsBtn"
+        android:layout_below="@+id/currentIncidentsButton"
         android:layout_marginTop="143dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="69dp"></ListView>
 
     <ListView
-        android:id="@+id/roadworksListView"
+        android:id="@+id/plannedRoadworksListView"
         android:layout_width="364dp"
         android:layout_height="434dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/fetchRoadworksBtn"
+        android:layout_below="@+id/plannedRoadworksButton"
         android:layout_marginTop="143dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="69dp"></ListView>
-
 
 </RelativeLayout>

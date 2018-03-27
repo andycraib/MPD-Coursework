@@ -5,6 +5,8 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <!--Andrew Craib S1628364-->
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -69,7 +71,7 @@
                 android:id="@+id/pubDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pub Date"
+                android:text="Publish Date"
                 android:layout_marginBottom="5dp"/>
 
         </LinearLayout>

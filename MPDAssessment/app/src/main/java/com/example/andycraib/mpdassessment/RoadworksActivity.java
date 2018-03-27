@@ -36,56 +36,66 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Andrew Craib on 19/03/2018.
- */
+// Andrew Craib S1628364
 
 public class RoadworksActivity extends AppCompatActivity {
 
-    private List<Traffic> roadworksList;
+    //Lists for Roadworks Activity
+    private List<Traffic> plannedRoadworksList;
     private List<Traffic> selectedList;
 
-    private ArrayAdapter<Traffic> roadworksAdapter;
-    private ArrayAdapter<Traffic> selectedAdapter;
+    //Adapters for Roadworks Activity
+    private ArrayAdapter<Traffic> plannedRoadworksAdapter;
+    private ArrayAdapter<Traffic> selectedDetailAdapter;
 
-    private Button selectDateBtn;
-    private Button getRoadworkBtn;
+    //Declaring the buttons for Roadworks Activity
+    private Button selectDateButton;
+    private Button getPlannedRoadworksButton;
 
-    private EditText enterNameTxt;
-    private ListView roadworksListview;
+    //Declaring EditText and ListViews for Roadworks Activity
+    private EditText enterNameText;
+    private ListView plannedRoadworksListView;
     private ListView selectedListView;
     Date selectedDate;
 
+    //Shows the Roadworks Layout
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.roadworks_layout);
 
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        selectDateBtn = (Button) findViewById(R.id.selectDateBtn);
-        getRoadworkBtn = (Button) findViewById(R.id.getRoadworkBtn);
-        getRoadworkBtn.setInputType(0);
-        enterNameTxt = (EditText) findViewById(R.id.enterNameTxt);
+        //Link buttons and text to XML layout
+        selectDateButton = (Button) findViewById(R.id.selectDateButton);
+        getPlannedRoadworksButton = (Button) findViewById(R.id.getPlannedRoadworksButton);
+        getPlannedRoadworksButton.setInputType(0);
+        enterNameText = (EditText) findViewById(R.id.enterNameText);
 
-        roadworksListview = (ListView) findViewById(R.id.roadworksListView);
+        //Link ListViews to XML layout
+        plannedRoadworksListView = (ListView) findViewById(R.id.plannedRoadworksListView);
         selectedListView = (ListView) findViewById(R.id.selectedListView);
 
         selectedListView.setVisibility(View.INVISIBLE);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Get back button
+        //To get the back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        roadworksList = (ArrayList<Traffic>)getIntent().getSerializableExtra("roadworksList");
+        //To attach roadworks list to ArrayList
+        plannedRoadworksList = (ArrayList<Traffic>)getIntent().getSerializableExtra("plannedRoadworksList");
         selectedList = new ArrayList<Traffic>();
 
-        roadworksAdapter = new trafficArrayAdapter(RoadworksActivity.this, 0, roadworksList);
-        roadworksListview.setAdapter(roadworksAdapter);
+        //To attach adapter to roadworksList
+        plannedRoadworksAdapter = new trafficArrayAdapter(RoadworksActivity.this, 0, plannedRoadworksList);
+        plannedRoadworksListView.setAdapter(plannedRoadworksAdapter);
 
-        roadworksListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //This gets the details required for the roadworks list
+        plannedRoadworksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView,
                                     View view, int position, long rowId) {
 
-                Traffic traffic = roadworksList.get(position);
+                Traffic traffic = plannedRoadworksList.get(position);
 
                 Intent intent = new Intent(RoadworksActivity.this, DetailActivity.class);
                 intent.putExtra("title", traffic.getTitle());
@@ -99,12 +109,13 @@ public class RoadworksActivity extends AppCompatActivity {
             }
         });
 
+        //This gets the details required for the detailed selection
         selectedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView,
                                     View view, int position, long rowId) {
 
-                Traffic traffic = roadworksList.get(position);
+                Traffic traffic = plannedRoadworksList.get(position);
 
                 Intent intent = new Intent(RoadworksActivity.this, DetailActivity.class);
                 intent.putExtra("title", traffic.getTitle());
@@ -119,73 +130,79 @@ public class RoadworksActivity extends AppCompatActivity {
         });
 
 
+        //This generates the calendar for use
         final Calendar myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
-                selectedList = new ArrayList<Traffic>(); //Reset each time a new date is selected
+                //This resets each time a new date is selected
+                selectedList = new ArrayList<Traffic>();
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 selectedDate = myCalendar.getTime();
                 getSelectedDates();
                 if (selectedList.size() > 0) {
-                    selectedAdapter = new trafficArrayAdapter(RoadworksActivity.this, 0, selectedList);
-                    selectedListView.setAdapter(selectedAdapter);
+                    selectedDetailAdapter = new trafficArrayAdapter(RoadworksActivity.this, 0, selectedList);
+                    selectedListView.setAdapter(selectedDetailAdapter);
                     selectedListView.setVisibility(View.VISIBLE);
-                    roadworksListview.setVisibility(View.INVISIBLE);
+                    plannedRoadworksListView.setVisibility(View.INVISIBLE);
                 }
                 else
                 {
                     displayErrorMessage();
                     selectedListView.setVisibility(View.INVISIBLE);
-                    roadworksListview.setVisibility(View.VISIBLE);
+                    plannedRoadworksListView.setVisibility(View.VISIBLE);
                 }
             }
 
         };
 
-        selectDateBtn.setOnClickListener(new View.OnClickListener() {
+        //This opens the calendar when the button is clicked
+        selectDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //Open datepicker upon click
+            public void onClick(View v) {
                 new DatePickerDialog(RoadworksActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
-        getRoadworkBtn.setOnClickListener(new View.OnClickListener() {
+        //This closes the virtual keyboard when the button is clicked
+        getPlannedRoadworksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try  {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE); //Close the virtual keyboard when button is pressed
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
 
                 }
 
-                selectedList = new ArrayList<Traffic>(); //Reset each time a new date is selected
-                String getTxtInput = enterNameTxt.getText().toString();
+                //This resets each time a new date is chosen
+                selectedList = new ArrayList<Traffic>();
+                String getTxtInput = enterNameText.getText().toString();
                 getRoadworksWithName(getTxtInput);
                 if (selectedList.size() > 0) {
-                    selectedAdapter = new trafficArrayAdapter(RoadworksActivity.this, 0, selectedList);
-                    selectedListView.setAdapter(selectedAdapter);
+                    selectedDetailAdapter = new trafficArrayAdapter(RoadworksActivity.this, 0, selectedList);
+                    selectedListView.setAdapter(selectedDetailAdapter);
                     selectedListView.setVisibility(View.VISIBLE);
-                    roadworksListview.setVisibility(View.INVISIBLE);
+                    plannedRoadworksListView.setVisibility(View.INVISIBLE);
                 }
                 else
                 {
                     displayErrorMessage();
                     selectedListView.setVisibility(View.INVISIBLE);
-                    roadworksListview.setVisibility(View.VISIBLE);
+                    plannedRoadworksListView.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
     @Override
+    //This goes back to the previous page
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -196,14 +213,16 @@ public class RoadworksActivity extends AppCompatActivity {
         }
     }
 
+    //This displays an error message when necessary
     public void displayErrorMessage() {
         Toast.makeText(RoadworksActivity.this,
                 "No entries found!",
                 Toast.LENGTH_LONG).show();
     }
 
+    //This takes the value from the edit text bar
     public void getRoadworksWithName(String searchTerm) {
-        for (Traffic t : roadworksList) {
+        for (Traffic t : plannedRoadworksList) {
             String search = t.getTitle();
             if (search.toLowerCase().indexOf(searchTerm.toLowerCase()) != -1) {
                 selectedList.add(t);
@@ -211,15 +230,16 @@ public class RoadworksActivity extends AppCompatActivity {
         }
     }
 
+    //This parses the details of the selected dates chosen from the calendar
     public void getSelectedDates() {
-        for(Traffic t : roadworksList) {
+        for(Traffic t : plannedRoadworksList) {
             String pattern = "dd MMMM yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
             DateTime dateSelected = new DateTime(selectedDate);
             String[] parts = t.getDescription().split("<br />");
-            String part1 = parts[0]; // 004
-            String part2 = parts[1]; // 034556
+            String part1 = parts[0];
+            String part2 = parts[1];
 
             part1 = part1.substring(part1.indexOf(',') + 1, part1.indexOf('-')).substring(1);
             part2 = part2.substring(part2.indexOf(',') + 1, part2.indexOf('-')).substring(1);

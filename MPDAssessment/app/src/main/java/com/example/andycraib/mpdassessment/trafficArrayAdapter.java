@@ -22,42 +22,41 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Andrew Craib on 22/03/2018.
- */
+// Andrew Craib S1628364
 
-//custom ArrayAdapter
+//This is a custom ArrayAdapter
 class trafficArrayAdapter extends ArrayAdapter<Traffic> implements Serializable {
 
     private Context context;
-    private ArrayList<Traffic> rentalProperties;
+    private ArrayList<Traffic> detailProperties;
 
-    //constructor, call on creation
+    //This is a constructor, that is called on creation
     public trafficArrayAdapter(Context context, int resource, List<Traffic> objects) {
         super(context, resource, objects);
 
         this.context = context;
-        this.rentalProperties = (ArrayList)objects;
+        this.detailProperties = (ArrayList)objects;
     }
 
-
-    //called when rendering the list
+    //This is called when rendering the list
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        //get the property we are displaying
-        Traffic traffic = rentalProperties.get(position);
+        //This gets the property to be displayed
+        Traffic traffic = detailProperties.get(position);
 
-        //get the inflater and inflate the XML layout for each item
+        //This gets the inflater and is used to inflate the XML layout for each item
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.property_layout, null);
 
+        //Parses the dates, finds out the length in between start and end dates assigns them to a colour
         if (traffic.getDescription().contains("Start Date")) {
             String pattern = " EEEE, dd MMMM yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
             String[] parts = traffic.getDescription().split("<br />");
-            String part1 = parts[0]; // 004
-            String part2 = parts[1]; // 034556
+
+            String part1 = parts[0];
+            String part2 = parts[1];
 
             part1 = part1.substring(part1.indexOf(':') + 1, part1.indexOf('-'));
             part2 = part2.substring(part2.indexOf(':') + 1, part2.indexOf('-'));
@@ -71,11 +70,15 @@ class trafficArrayAdapter extends ArrayAdapter<Traffic> implements Serializable 
                     diffDays = diffDays + 1;
                 }
 
+                //Less than or equal to 1 = Green Background
                 if (diffDays <= 1) {
                     view.setBackgroundColor(Color.GREEN);
-                } else if(diffDays >= 1 && diffDays <= 3) {
+                }
+                //Less than or equal to 3 & more than or equal to 1 = Yellow Background
+                else if(diffDays >= 1 && diffDays <= 3) {
                     view.setBackgroundColor(Color.YELLOW);
                 }
+                //Anything else or anything above 3 = Red Background
                 else
                 {
                     view.setBackgroundColor(Color.RED);
@@ -83,31 +86,22 @@ class trafficArrayAdapter extends ArrayAdapter<Traffic> implements Serializable 
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-
-
         }
 
+        //This links the TextViews to the XML layout
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView description = (TextView) view.findViewById(R.id.description);
         TextView link = (TextView) view.findViewById(R.id.link);
 
-        //TextView bedroom = (TextView) view.findViewById(R.id.bedroom);
-        //TextView bathroom = (TextView) view.findViewById(R.id.bathroom);
-        //TextView carspot = (TextView) view.findViewById(R.id.carspot);
+        //This links the image view to the XML file
         ImageView image = (ImageView) view.findViewById(R.id.image);
 
-        //set address and description
-        //String completeAddress = incident.getTitle() + " " + incident.getDescription() + ", " + incident.getLink() + ", " + incident.getAuthor();
-        //address.setText(completeAddress);
-
+        //Getters and Setters
         title.setText(traffic.getTitle());
         description.setText(traffic.getDescription());
         link.setText(traffic.getLink());
 
-
-
-        //display trimmed excerpt for description
+        //This displays the trimmed excerpt for description
         int descriptionLength = traffic.getDescription().length();
         if(descriptionLength >= 100){
             String descriptionTrim = traffic.getDescription().substring(0, 100) + "...";
@@ -116,14 +110,7 @@ class trafficArrayAdapter extends ArrayAdapter<Traffic> implements Serializable 
             description.setText(traffic.getDescription());
         }
 
-        //set price and rental attributes
-        // price.setText("$" + String.valueOf(property.getPrice()));
-        //bedroom.setText("Bed: " + String.valueOf(property.getBedrooms()));
-        //bathroom.setText("Bath: " + String.valueOf(property.getBathrooms()));
-        //carspot.setText("Car: " + String.valueOf(property.getCarspots()));
-
-        //get the image associated with this property
-
+        //This gets the roadwork image from the drawable file
         int imageID = context.getResources().getIdentifier("roadwork", "drawable", context.getPackageName());
         image.setImageResource(imageID);
 

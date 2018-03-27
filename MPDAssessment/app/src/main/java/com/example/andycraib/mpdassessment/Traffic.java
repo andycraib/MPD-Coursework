@@ -2,12 +2,11 @@ package com.example.andycraib.mpdassessment;
 
 import java.io.Serializable;
 
-/**
- * Created by Andrew Craib on 22/03/2018.
- */
+// Andrew Craib S1628364
 
 public class Traffic implements Serializable
 {
+    //Variables declared
     private String title;
     private String description;
     private String link;
@@ -16,6 +15,7 @@ public class Traffic implements Serializable
     private String comments;
     private String pubDate;
 
+    //Initialising Variables
     public Traffic()
     {
         title = "";
@@ -32,24 +32,27 @@ public class Traffic implements Serializable
         description = date;
     }
 
-    public Traffic(String atitle , String adescription, String alink, String ageorss, String aauthor, String acomments, String apubDate)
+    //Constructor
+    public Traffic(String ttitle , String tdescription, String tlink, String tgeorss, String tauthor, String tcomments, String tpubDate)
     {
-        title = atitle;
-        description = adescription;
-        link = alink;
-        georss = ageorss;
-        author = aauthor;
-        comments = acomments;
-        pubDate = apubDate;
+        title = ttitle;
+        description = tdescription;
+        link = tlink;
+        georss = tgeorss;
+        author = tauthor;
+        comments = tcomments;
+        pubDate = tpubDate;
     }
 
-    public Traffic(String atitle , String adescription, String alink)
+    //Overload Constructor
+    public Traffic(String ttitle , String tdescription, String tlink)
     {
-        title = atitle;
-        description = adescription;
-        link = alink;
+        title = ttitle;
+        description = tdescription;
+        link = tlink;
     }
 
+    //Getters and Setters
     public String getTitle() {
         return title;
     }
@@ -106,13 +109,4 @@ public class Traffic implements Serializable
         this.pubDate = pubDate;
     }
 
-    /*public String toString()
-    {
-        String temp;
-
-        temp = bolt + " " + washer + " " + nut;
-
-        return temp;
-    }*/
-
-} // End of class
+}

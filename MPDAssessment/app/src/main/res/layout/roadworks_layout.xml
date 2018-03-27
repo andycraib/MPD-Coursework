@@ -10,15 +10,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.andycraib.mpdassessment.RoadworksActivity">
 
+    <!--Andrew Craib S1628364-->
+
     <TextView
         android:id="@+id/selectDateTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:text="Select the button to see all roadworks on a certain day" />
+        android:text="Select the Calendar button to check planned road works on a certain day" />
 
     <Button
-        android:id="@+id/selectDateBtn"
+        android:id="@+id/selectDateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/selectDateTxt"
@@ -27,30 +29,30 @@
         android:text="Calendar" />
 
     <EditText
-        android:id="@+id/enterNameTxt"
+        android:id="@+id/enterNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/selectDateBtn"
+        android:layout_below="@+id/selectDateButton"
         android:layout_marginTop="29dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Enter roadwork name" />
 
     <Button
-        android:id="@+id/getRoadworkBtn"
+        android:id="@+id/getPlannedRoadworksButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/enterNameTxt"
+        android:layout_alignBottom="@+id/enterNameText"
         android:layout_alignEnd="@+id/selectDateTxt"
         android:layout_marginEnd="11dp"
         android:text="Select" />
 
     <ListView
-        android:id="@+id/roadworksListView"
+        android:id="@+id/plannedRoadworksListView"
         android:layout_width="364dp"
         android:layout_height="434dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/selectDateBtn"
+        android:layout_below="@+id/selectDateButton"
         android:layout_marginTop="86dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="69dp"></ListView>
@@ -59,7 +61,7 @@
         android:id="@+id/selectedListView"
         android:layout_width="364dp"
         android:layout_height="434dp"
-        android:layout_alignTop="@+id/roadworksListView"
+        android:layout_alignTop="@+id/plannedRoadworksListView"
         android:layout_centerHorizontal="true"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="69dp"></ListView>
